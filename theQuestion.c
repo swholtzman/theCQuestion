@@ -45,6 +45,7 @@ int *readValueFile(const char* inputFileName, int *arr) {
 
 struct InitialNodes *generateNode(int value) {
     struct InitialNodes *newNode = malloc(sizeof(struct InitialNodes));
+
     if (newNode == NULL) {
         perror("Error");
         exit(EXIT_FAILURE);
@@ -63,9 +64,12 @@ struct InitialNodes *newNodeList(int arr[], int size) {
     for (int i = 0; i < size; i++) {
         struct InitialNodes *newNode = generateNode(arr[i]);
 
+        // first node
         if (head == NULL) {
             head = newNode;
             tail = newNode;
+
+        // remainder of the list
         } else {
             tail -> next = newNode;
             tail = newNode;
@@ -76,13 +80,62 @@ struct InitialNodes *newNodeList(int arr[], int size) {
 }
 
 struct InitialNodes *removeCopies(struct InitialNodes *head) {
-    struct InitialNodes *nextNode = NULL;
-    struct InitialNodes *lastNode = NULL;
+    struct InitialNodes *current = head;
 
-    while(head -> next != NULL) {
-        
+    // iterate through the full list with current holding a position
+    while(current != NULL && current -> next != NULL) {
+        struct InitialNodes *runner = current;
+
+        // runner will "run" through the full length of the 
+            // list until there are no more values
+        while(runner -> next != NULL) {
+
+            // if the value stored at current is equal to the value stored at the runner
+            if(current -> value == runner -> next -> value) {
+
+                // initiate a node to equal that which we know to be a duplicate
+                struct InitialNodes *trashCollector = runner -> next;
+
+                // allow the runner to point to the node beyond 
+                    // that which it is currently pointing
+                runner -> next = runner -> next -> next;
+
+                // delete the duplicate node
+                free(trashCollector);
+
+            } else {
+                // move the runner to whatever its pointing at 
+                runner = runner -> next;
+            }
+        }
+        // current moves one forward
+        current = current -> next;
     }
+    return head;
 }
+
+void printInitialsToFile(const char* outputFileName, struct InitialNodes *head) {
+    FILE *outputFile = fopen(outputFileName, "w");
+
+    if (outputFile == NULL) {
+        perror("Error");
+        exit(EXIT_FAILURE);
+    }
+
+    struct InitialNodes *printingNode = head;
+
+    int printNum;
+
+    while (printingNode != NULL) {
+        printNum = printingNode -> value;
+        fprintf(outputFile, "%d\n", printNum);
+        printingNode = printingNode -> next;
+    }
+
+    fclose(outputFile);
+}
+
+
 
 int main(int argc, char *argv[]) {
     // to run:
@@ -98,11 +151,19 @@ int main(int argc, char *argv[]) {
     // task 1
     struct InitialNodes *firstList = newNodeList(newArray, INITIAL_VALUES);
 
-    printf("Node Contents\n");
-    while (firstList != NULL) {
-        printf("%d\n", firstList -> value);
-        firstList = firstList -> next;
-    }
+    // we have our node list, we dont need the array anymore
+    free(newArray);
+
+    //task 2
+    struct InitialNodes *cleanedList = removeCopies(firstList);
+
+    // we have our new list, we can free the old one
+    free(firstList);
+
+    const char *outputFile = "initialList.txt";
+    printInitialsToFile(outputFile, cleanedList);
+
+
 
     printf("success");
     return 0;
