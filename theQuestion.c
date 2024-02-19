@@ -15,6 +15,20 @@ struct LaterNodes
     struct LaterNodes *next;
 };
 
+
+
+/**
+ * @brief   Reads integer values from a file and stores them in an array.
+ *
+ * This function reads integer values from the specified input file and dynamically
+ * allocates memory to store them in an array. It returns the pointer to the array.
+ *
+ * @param   inputFileName   The name of the input file to be read.
+ * @param   arr             Pointer to the array where values will be stored.
+ * @return  int*            Pointer to the dynamically allocated array.
+ *
+ * @note    Exits the program with an error message if the file cannot be opened.
+ */
 int *readValueFile(const char *inputFileName, int *arr)
 {
     FILE *inputFile = fopen(inputFileName, "r");
@@ -48,6 +62,19 @@ int *readValueFile(const char *inputFileName, int *arr)
     return arr;
 }
 
+
+
+/**
+ * @brief   Generates a new node for the initial linked list.
+ *
+ * This function dynamically allocates memory for a new node of the initial linked list
+ * and initializes its value and next pointer.
+ *
+ * @param   value   The value to be stored in the new node.
+ * @return  struct InitialNodes*    Pointer to the newly created node.
+ *
+ * @note    Exits the program with an error message if memory allocation fails.
+ */
 struct InitialNodes *generateNode(int value)
 {
     struct InitialNodes *newNode = malloc(sizeof(struct InitialNodes));
@@ -64,6 +91,18 @@ struct InitialNodes *generateNode(int value)
     return newNode;
 }
 
+
+
+/**
+ * @brief   Creates a linked list from an array of values.
+ *
+ * This function takes an array of integer values and creates a linked list from them.
+ * It returns the pointer to the head of the created linked list.
+ *
+ * @param   arr     Array of integer values.
+ * @param   size    Size of the array.
+ * @return  struct InitialNodes*    Pointer to the head of the linked list.
+ */
 struct InitialNodes *newNodeList(int arr[], int size)
 {
     struct InitialNodes *head = NULL;
@@ -91,6 +130,17 @@ struct InitialNodes *newNodeList(int arr[], int size)
     return head;
 }
 
+
+
+/**
+ * @brief   Removes duplicate values from the initial linked list.
+ *
+ * This function removes duplicate values from the initial linked list and returns
+ * the pointer to the head of the modified list.
+ *
+ * @param   head    Pointer to the head of the initial linked list.
+ * @return  struct InitialNodes*    Pointer to the head of the modified linked list.
+ */
 struct InitialNodes *removeCopies(struct InitialNodes *head)
 {
     struct InitialNodes *current = head;
@@ -131,6 +181,18 @@ struct InitialNodes *removeCopies(struct InitialNodes *head)
     return head;
 }
 
+
+
+/**
+ * @brief   Prints the values of the initial linked list to a file.
+ *
+ * This function prints the values of the initial linked list to the specified output file.
+ *
+ * @param   outputFileName  The name of the output file.
+ * @param   head            Pointer to the head of the initial linked list.
+ *
+ * @note    Exits the program with an error message if the file cannot be opened.
+ */
 void printInitialsToFile(const char *outputFileName, struct InitialNodes *head)
 {
     FILE *outputFile = fopen(outputFileName, "w");
@@ -155,6 +217,20 @@ void printInitialsToFile(const char *outputFileName, struct InitialNodes *head)
     fclose(outputFile);
 }
 
+
+
+/**
+ * @brief   Adds a new node with a given value to the initial linked list.
+ *
+ * This function adds a new node with the specified value to the end of the initial linked list.
+ * If the list is empty, it creates a new list with the new node.
+ *
+ * @param   head        Pointer to the head of the initial linked list.
+ * @param   inputValue  The value to be added to the linked list.
+ * @return  struct InitialNodes*    Pointer to the head of the modified linked list.
+ *
+ * @note    Exits the program with an error message if memory allocation fails.
+ */
 struct InitialNodes *addNode(struct InitialNodes *head, int inputValue)
 {
     struct InitialNodes *newNode = malloc(sizeof(struct InitialNodes));
@@ -191,11 +267,77 @@ struct InitialNodes *addNode(struct InitialNodes *head, int inputValue)
     return head;
 }
 
+
+
+/**
+ * @brief   Inserts a new node with a given value at a specified index in the initial linked list.
+ *
+ * This function inserts a new node with the specified value at the specified index in the initial linked list.
+ *
+ * @param   head    Pointer to the head of the initial linked list.
+ * @param   val     The value to be inserted into the linked list.
+ * @param   index   The index at which the new node is to be inserted.
+ * @return  struct InitialNodes*    Pointer to the head of the modified linked list.
+ *
+ * @note    Exits the program with an error message if memory allocation fails.
+ */
 struct InitialNodes *insertNode(struct InitialNodes *head, int val, int index)
 {
-    
+    struct InitialNodes *currentNode = head;
+    struct InitialNodes *previousNode = NULL;
+
+    // traverse list until reaching the desired 
+    // index or the end of the list
+    int currentIndex = 0;
+    while (currentNode != NULL && currentIndex < index) {
+        previousNode = currentNode;
+        currentNode = currentNode -> next;
+        currentIndex++;
+    }
+
+    // check if index is out of bounds
+    if (currentIndex != index) {
+        printf("Index out of bounds");
+        return head;
+    }
+
+    // create a new node 
+    struct InitialNodes *newNode = malloc(sizeof(struct InitialNodes));
+    if (newNode == NULL) {
+        perror("Error");
+        exit(EXIT_FAILURE);
+    }
+
+    newNode -> value = val;
+
+    // insert new node into the list
+    if (previousNode == NULL) {
+        newNode -> next = head;
+        head = newNode;
+
+    // insert into middle or end of list
+    } else {
+        newNode -> next = currentNode;
+        previousNode -> next = newNode;
+    }
+
+    return head;
+
 }
 
+
+
+/**
+ * @brief   Main function of the program.
+ *
+ * This function serves as the entry point of the program. It orchestrates the execution
+ * of various tasks such as reading values from a file, manipulating linked lists, and printing
+ * results to files.
+ *
+ * @param   argc    Number of command-line arguments.
+ * @param   argv    Array of command-line arguments.
+ * @return  int     Program exit status.
+ */
 int main(int argc, char *argv[])
 {
     // to run:
@@ -231,10 +373,29 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    addNode(cleanedList, newVal);
+    cleanedList = addNode(cleanedList, newVal);
 
-    const char *outputFile2 = "finalList.txt";
-    printInitialsToFile(outputFile2, cleanedList);
+    printf("Please enter an integer value to be inserted: ");
+    int insertValue;
+    if (scanf("%d", &insertValue) != 1)
+    {
+        perror("Error");
+        exit(EXIT_FAILURE);
+    }
+
+
+    printf("Please enter an index to insert at: ");
+    int index;
+    if (scanf("%d", &index) != 1)
+    {
+        perror("Error");
+        exit(EXIT_FAILURE);
+    }
+
+    cleanedList = insertNode(cleanedList, insertValue, index);
+
+    const char *addFile = "addedList.txt";
+    printInitialsToFile(addFile, cleanedList);
 
     printf("success");
     return 0;
