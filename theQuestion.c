@@ -65,15 +65,14 @@ int *readValueFile(const char *inputFileName, int *arr)
 
 
 /**
- * @brief   Generates a new node for the initial linked list.
+ * @brief   Reverses the initial linked list iteratively.
  *
- * This function dynamically allocates memory for a new node of the initial linked list
- * and initializes its value and next pointer.
+ * This function reverses the initial linked list by iteratively rearranging the pointers
+ * of each node. It starts from the head of the list and progresses until the end, updating
+ * pointers as it goes along to reverse the order of the nodes.
  *
- * @param   value   The value to be stored in the new node.
- * @return  struct InitialNodes*    Pointer to the newly created node.
- *
- * @note    Exits the program with an error message if memory allocation fails.
+ * @param   head    Pointer to the head of the initial linked list.
+ * @return  struct InitialNodes*    Pointer to the head of the reversed linked list.
  */
 struct InitialNodes *generateNode(int value)
 {
@@ -92,6 +91,16 @@ struct InitialNodes *generateNode(int value)
 }
 
 
+int* nodesToArray(struct InitialNodes *head) {
+
+
+    if (head == NULL) {
+        perror("Error");
+        return 0;
+    }
+
+    
+}
 
 /**
  * @brief   Creates a linked list from an array of values.
@@ -326,6 +335,26 @@ struct InitialNodes *insertNode(struct InitialNodes *head, int val, int index)
 }
 
 
+struct InitialNodes *reverseIterative(struct InitialNodes *head) {
+    struct InitialNodes *prev = NULL;
+    struct InitialNodes *nextNode = NULL;
+
+    if (head == NULL) {
+        return NULL;
+    }
+
+    while (head != NULL) {
+        nextNode = head -> next;
+        head -> next = prev;
+        prev = head;
+        head = nextNode;
+    }
+
+    head = prev;
+    return head;
+}
+
+
 
 /**
  * @brief   Main function of the program.
@@ -392,10 +421,16 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    cleanedList = insertNode(cleanedList, insertValue, index);
 
+    cleanedList = insertNode(cleanedList, insertValue, index);
     const char *addFile = "addedList.txt";
     printInitialsToFile(addFile, cleanedList);
+
+
+    struct InitialNodes *reversedList = reverseIterative(cleanedList);
+    const char *reverseFile = "firstReversedList.txt";
+    printInitialsToFile(reverseFile, reversedList);
+
 
     printf("success");
     return 0;
