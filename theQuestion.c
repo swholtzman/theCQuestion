@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 int INITIAL_VALUES = 0;
+int NEW_VALUES = 0;
 
 struct InitialNodes
 {
@@ -64,15 +65,17 @@ int *readValueFile(const char *inputFileName, int *arr)
 
 
 
+
 /**
- * @brief   Reverses the initial linked list iteratively.
+ * @brief   Generates a new node for the initial linked list.
  *
- * This function reverses the initial linked list by iteratively rearranging the pointers
- * of each node. It starts from the head of the list and progresses until the end, updating
- * pointers as it goes along to reverse the order of the nodes.
+ * This function dynamically allocates memory for a new node of the initial linked list
+ * and initializes its value and next pointer.
  *
- * @param   head    Pointer to the head of the initial linked list.
- * @return  struct InitialNodes*    Pointer to the head of the reversed linked list.
+ * @param   value   The value to be stored in the new node.
+ * @return  struct InitialNodes*    Pointer to the newly created node.
+ *
+ * @note    Exits the program with an error message if memory allocation fails.
  */
 struct InitialNodes *generateNode(int value)
 {
@@ -91,16 +94,7 @@ struct InitialNodes *generateNode(int value)
 }
 
 
-int* nodesToArray(struct InitialNodes *head) {
 
-
-    if (head == NULL) {
-        perror("Error");
-        return 0;
-    }
-
-    
-}
 
 /**
  * @brief   Creates a linked list from an array of values.
@@ -138,6 +132,7 @@ struct InitialNodes *newNodeList(int arr[], int size)
 
     return head;
 }
+
 
 
 
@@ -192,6 +187,7 @@ struct InitialNodes *removeCopies(struct InitialNodes *head)
 
 
 
+
 /**
  * @brief   Prints the values of the initial linked list to a file.
  *
@@ -225,6 +221,7 @@ void printInitialsToFile(const char *outputFileName, struct InitialNodes *head)
 
     fclose(outputFile);
 }
+
 
 
 
@@ -278,6 +275,7 @@ struct InitialNodes *addNode(struct InitialNodes *head, int inputValue)
 
 
 
+
 /**
  * @brief   Inserts a new node with a given value at a specified index in the initial linked list.
  *
@@ -292,6 +290,7 @@ struct InitialNodes *addNode(struct InitialNodes *head, int inputValue)
  */
 struct InitialNodes *insertNode(struct InitialNodes *head, int val, int index)
 {
+    
     struct InitialNodes *currentNode = head;
     struct InitialNodes *previousNode = NULL;
 
@@ -330,11 +329,25 @@ struct InitialNodes *insertNode(struct InitialNodes *head, int val, int index)
         previousNode -> next = newNode;
     }
 
+    INITIAL_VALUES++;
+
     return head;
 
 }
 
 
+
+
+/**
+ * @brief   Reverses the initial linked list iteratively.
+ *
+ * This function reverses the initial linked list by iteratively rearranging the pointers
+ * of each node. It starts from the head of the list and progresses until the end, updating
+ * pointers as it goes along to reverse the order of the nodes.
+ *
+ * @param   head    Pointer to the head of the initial linked list.
+ * @return  struct InitialNodes*    Pointer to the head of the reversed linked list.
+ */
 struct InitialNodes *reverseIterative(struct InitialNodes *head) {
     struct InitialNodes *prev = NULL;
     struct InitialNodes *nextNode = NULL;
@@ -356,6 +369,133 @@ struct InitialNodes *reverseIterative(struct InitialNodes *head) {
 
 
 
+
+/**
+ * @brief   Converts a linked list of integers to an array.
+ *
+ * This function traverses the linked list of integers and copies the values into
+ * a dynamically allocated array.
+ *
+ * @param   head    Pointer to the head of the linked list.
+ * @return  int*    Pointer to the array containing the values.
+ */
+int* nodesToArray(struct InitialNodes *head) {
+    
+    if (head == NULL) {
+        perror("Error");
+        return NULL;
+    }
+
+    int *arr = malloc(NEW_VALUES * sizeof(int));
+    if (arr == NULL) {
+        perror("Error");
+        return NULL;
+    }
+
+
+    while (head != NULL) {
+        
+        arr[NEW_VALUES] = head -> value;
+        head = head -> next;
+        NEW_VALUES++;
+    }
+
+    return arr;
+}
+
+
+
+
+/**
+ * @brief   Copies an integer array.
+ *
+ * This function creates a copy of the given integer array dynamically, resizing it
+ * as needed to fit all elements. It returns a pointer to the newly created copy.
+ *
+ * @param   arr Pointer to the integer array to be copied.
+ * @return  int* Pointer to the copy of the integer array.
+ *              Returns NULL if the input array is NULL or memory allocation fails.
+ */
+int *copyIntArray(int *arr) {
+
+    if (arr == NULL) {
+        return NULL;
+    }
+
+    int *newArray = malloc(NEW_VALUES * sizeof(int));
+    for (int i = 0; i < NEW_VALUES; i++) {
+        newArray[i] = arr[i];
+    }
+
+    return newArray;
+}
+
+
+
+/**
+ * @brief   Reverses an integer array.
+ *
+ * This function creates a new array that contains the elements of the input array
+ * in reverse order.
+ *
+ * @param   arr Pointer to the integer array to be reversed.
+ * @return  int* Pointer to the reversed integer array.
+ *              Returns NULL if either the input array or the reversed array cannot be allocated.
+ */
+int *reverseArray(int *arr) {
+    
+    if (arr == NULL) {
+        return NULL;
+    }
+
+    int *reversedArray = malloc(NEW_VALUES * sizeof(int));
+    if (reversedArray == NULL) {
+        return NULL;
+    }
+
+    int index = 0;
+    for (int i = NEW_VALUES; i >= 0; i--) {
+        reversedArray[index] = arr[i];
+        index++;
+    }
+
+    return reversedArray;
+}
+
+
+
+
+/**
+ * @brief   Prints two integer arrays to a file.
+ *
+ * This function prints the elements of two integer arrays to a file, separated by a newline.
+ *
+ * @param   outputFileName  The name of the file to write the arrays to.
+ * @param   arr1            Pointer to the first integer array.
+ * @param   arr2            Pointer to the second integer array.
+ * @return  void
+ */
+void printArraysToFile(const char* outputFileName, int *arr1, int *arr2) {
+
+    FILE *outputFile = fopen(outputFileName, "w");
+    if (outputFile == NULL || arr1 == NULL || arr2 == NULL) {
+        return;
+    }
+
+    for (int i = 0; i < NEW_VALUES; i++) {
+        fprintf(outputFile, "%d ", arr1[i]);  // Print elements of arr1 to file
+    }
+    fprintf(outputFile, "\n");
+
+    for (int i = 0; i < NEW_VALUES; i++) {
+        fprintf(outputFile, "%d ", arr2[i]);  // Print elements of arr2 to file
+    }
+
+    fclose(outputFile);  // Close the file after writing
+}
+
+
+
 /**
  * @brief   Main function of the program.
  *
@@ -369,9 +509,6 @@ struct InitialNodes *reverseIterative(struct InitialNodes *head) {
  */
 int main(int argc, char *argv[])
 {
-    // to run:
-    // gcc -o program theQuestion.c
-    // ./program
 
     const char *inputFile = "values1.txt";
 
@@ -379,11 +516,15 @@ int main(int argc, char *argv[])
 
     newArray = readValueFile(inputFile, newArray);
 
+
+
     // task 1
     struct InitialNodes *firstList = newNodeList(newArray, INITIAL_VALUES);
 
     // we have our node list, we dont need the array anymore
     free(newArray);
+
+
 
     // task 2
     struct InitialNodes *cleanedList = removeCopies(firstList);
@@ -391,9 +532,15 @@ int main(int argc, char *argv[])
     // we have our new list, we can free the old one
     free(firstList);
 
+
+
+    //task 3
     const char *outputFile = "initialList.txt";
     printInitialsToFile(outputFile, cleanedList);
 
+
+
+    // task 4
     printf("Please enter an integer value to be added: ");
     int newVal;
     if (scanf("%d", &newVal) != 1)
@@ -401,9 +548,11 @@ int main(int argc, char *argv[])
         perror("Error");
         exit(EXIT_FAILURE);
     }
-
     cleanedList = addNode(cleanedList, newVal);
 
+
+
+    // task 5
     printf("Please enter an integer value to be inserted: ");
     int insertValue;
     if (scanf("%d", &insertValue) != 1)
@@ -411,7 +560,6 @@ int main(int argc, char *argv[])
         perror("Error");
         exit(EXIT_FAILURE);
     }
-
 
     printf("Please enter an index to insert at: ");
     int index;
@@ -421,17 +569,59 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-
     cleanedList = insertNode(cleanedList, insertValue, index);
-    const char *addFile = "addedList.txt";
-    printInitialsToFile(addFile, cleanedList);
 
 
-    struct InitialNodes *reversedList = reverseIterative(cleanedList);
-    const char *reverseFile = "firstReversedList.txt";
-    printInitialsToFile(reverseFile, reversedList);
+
+//     // task 6
+//     const char *addFile = "addedList.txt";
+//     printInitialsToFile(addFile, cleanedList);
 
 
-    printf("success");
-    return 0;
+
+//     // task 7
+//     struct InitialNodes *reversedList = reverseIterative(cleanedList);
+
+//     // we no longer need cleanedList
+//     // free(cleanedList);
+
+
+
+//     // task 8
+//     const char *reverseFile = "firstReversedList.txt";
+//     printInitialsToFile(reverseFile, reversedList);
+
+
+
+//     // task 9
+//     int *intArray = nodesToArray(reversedList);
+
+//     // we no longer need reversedList
+//     free(reversedList);
+
+
+
+//     // task 10
+//     int *copiedArray = copyIntArray(intArray);
+
+
+//     // we no longer need intArray
+//     free(intArray);
+
+
+
+//     // task 11
+//     int *reversedArray = reverseArray(copiedArray);
+
+
+
+//     // task 12
+//     // const char *arrayForwardBackward = "arrayForwardBackward.txt"; 
+//     // printArraysToFile(arrayForwardBackward, copiedArray, reversedArray);
+
+//     return 0;
+
+//      // to run:
+//     // gcc -o program theQuestion.c
+//     // ./program
 }
