@@ -4,10 +4,10 @@ CFLAGS = -Wall -std=c11
 
 #Input file
 INPUT = values1.txt
-OUTPUT = initialList.txt
+OUTPUT = recursiveBinary.txt
 REF = ref.txt
 # Source file
-SRCS = theQuestion.c
+SRCS = binaryRecursive.c
 # Output
 TARGET = program
 

@@ -21,6 +21,7 @@
         "format": "c",
         "array": "c",
         "functional": "c",
-        "utility": "c"
+        "utility": "c",
+        "stdio.h": "c"
     }
 }

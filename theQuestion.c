@@ -393,28 +393,28 @@ int *arrayCopier(int *arr)
     return copiedArray;
 }
 
-int *arrayReversal(int *arr)
-{
-    if (arr == NULL)
-    {
-        return NULL;
-    }
+// int *arrayReversal(int *arr)
+// {
+//     if (arr == NULL)
+//     {
+//         return NULL;
+//     }
 
-    int *reversedArray = malloc(NEW_ARRAY_LENGTH * sizeof(int));
-    if (reversedArray == NULL)
-    {
-        return NULL;
-    }
+//     int *reversedArray = malloc(NEW_ARRAY_LENGTH * sizeof(int));
+//     if (reversedArray == NULL)
+//     {
+//         return NULL;
+//     }
 
-    size_t index = 0;
-    for (int i = NEW_ARRAY_LENGTH - 1; i >= 0; i--)
-    {
-        reversedArray[index] = arr[i];
-        index++;
-    }
+//     size_t index = 0;
+//     for (int i = NEW_ARRAY_LENGTH - 1; i >= 0; i--)
+//     {
+//         reversedArray[index] = arr[i];
+//         index++;
+//     }
 
-    return reversedArray;
-}
+//     return reversedArray;
+// }
 
 void freeList(struct InitialNodes *head)
 {
@@ -440,7 +440,7 @@ void freeList(struct InitialNodes *head)
  */
 int main(int argc, char *argv[])
 {
-    const char *inputFile = "values1.txt";
+    const char *inputFile = argv[1];
 
     int *newArray = NULL;
 
@@ -513,13 +513,13 @@ int main(int argc, char *argv[])
 
     freeList(reversedList);
 
-    int *copiedArray = arrayCopier(intArray);
-    int i = 0;
-    while (i < NEW_ARRAY_LENGTH)
-    {
-        printf("%d\n", copiedArray[i]);
-        i++;
-    }
+    // int *copiedArray = arrayCopier(intArray);
+    // int i = 0;
+    // while (i < NEW_ARRAY_LENGTH)
+    // {
+    //     printf("%d\n", copiedArray[i]);
+    //     i++;
+    // }
 
     // free(intArray);
 
