@@ -3,8 +3,8 @@ CC = gcc
 CFLAGS = -Wall -std=c11
 
 #Input file
-INPUT = values1.txt
-OUTPUT = recursiveBinary.txt
+INPUT = inputs/values1.txt
+OUTPUT = outputs/recursiveBinary.txt
 REF = ref.txt
 # Source file
 SRCS = binaryRecursive.c
@@ -19,6 +19,7 @@ $(TARGET): $(SRCS)
 	$(CC) $(CFLAGS) $(SRCS) -o $(TARGET)
 
 convert_input: $(INPUT)
+	@echo $(INPUT)
 	dos2unix $(INPUT)
 
 convert_output: $(OUTPUT)
@@ -34,7 +35,7 @@ check: $(OUTPUT) $(REF)
 
 # Rule to run the program
 run: $(TARGET)
-	./$(TARGET)
+	./$(TARGET) $(INPUT)
 
 # Rule to clean generated files
 clean:

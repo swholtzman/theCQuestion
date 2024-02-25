@@ -232,7 +232,7 @@ int main(int argc, char *argv[])
 {
     int *arr = NULL;
 
-    const char *inputFile = "values1.txt";
+    const char *inputFile = argv[1];
 
     arr = readFile(arr, inputFile);
 
@@ -257,10 +257,11 @@ int main(int argc, char *argv[])
     int result = recursiveBinary(arr, searchNumber, 0, arr_size - 1);
     result >= 0 ? printf("Your number was at index: %d\n", result) : printf("Your number is not in the array");
 
+
     struct Node *nodeArray = NULL;
     nodeArray = arrayToNodes(arr, arr_size, nodeArray);
 
-
+    nodeArray = reverseList(nodeArray);
 
     struct Node *currentNode = nodeArray;
     while (currentNode != NULL) {
