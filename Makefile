@@ -7,7 +7,7 @@ INPUT = inputs/values1.txt
 OUTPUT = outputs/recursiveBinary.txt
 REF = ref.txt
 # Source file
-SRCS = binaryRecursive.c
+SRCS = sortLinkedList.c
 # Output
 TARGET = program
 
