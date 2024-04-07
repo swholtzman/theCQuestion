@@ -338,7 +338,7 @@ struct InitialNodes *reverseIterative(struct InitialNodes *head)
     return head;
 }
 
-int *newArrayList(struct InitialNodes *head)
+int *newArrayList(struct InitialNodes *head)                                 
 {
     if (head == NULL)
     {

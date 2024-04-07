@@ -62,7 +62,7 @@ void mergeSort(int arr[], int left, int right)
     if (left < right)
     {
 
-        // sam as (left + right) / 2 but avoids overflow
+        // same as (left + right) / 2 but avoids overflow
         // for large left and right
         int mid = left + (right - left) / 2;
 
