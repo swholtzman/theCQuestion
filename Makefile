@@ -7,7 +7,7 @@ INPUT = inputs/values1.txt
 OUTPUT = outputs/recursiveBinary.txt
 REF = ref.txt
 # Source file
-SRCS = sortLinkedList.c
+SRCS = towerOfHanoi.c
 # Output
 TARGET = program
 
